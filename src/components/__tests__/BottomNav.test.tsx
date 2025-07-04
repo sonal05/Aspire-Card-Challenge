@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import BottomNav from '../BottomNav'
@@ -19,57 +19,39 @@ describe('BottomNav Component', () => {
   })
   
   it('renders all navigation items', () => {
-    render(<BottomNav activeTab="home" onTabChange={mockTabChange} />)
+    render(<BottomNav />)
     
     // Test for navigation items by their aria-label
-    expect(screen.getByRole('tab', { name: /navigate to home/i })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /navigate to cards/i })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /navigate to payments/i })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /navigate to credit/i })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /navigate to profile/i })).toBeInTheDocument()
+    expect(screen.getByLabelText('Navigate to Home')).toBeInTheDocument()
+    expect(screen.getByLabelText('Navigate to Cards')).toBeInTheDocument()
+    expect(screen.getByLabelText('Navigate to Payments')).toBeInTheDocument()
+    expect(screen.getByLabelText('Navigate to Credit')).toBeInTheDocument()
+    expect(screen.getByLabelText('Navigate to Profile')).toBeInTheDocument()
   })
   
-  it('applies active styles to the current tab', () => {
-    render(<BottomNav activeTab="my-debit-cards" onTabChange={mockTabChange} />)
-    
-    // Test that the active icon has the green color class
-    const activeIcon = screen.getByTestId('svg-Card')
-    expect(activeIcon).toHaveClass('text-[#01d167]')
-    
-    // Test that inactive icons have the gray color class
-    const inactiveIcon = screen.getByTestId('svg-Home')
-    expect(inactiveIcon).toHaveClass('text-[#DDDDDD]')
-    
-    // Test that label text has correct active color
-    const cardsTab = screen.getByRole('tab', { name: /navigate to cards/i })
-    const cardsLabel = cardsTab.querySelector('span')
-    expect(cardsLabel).toHaveClass('text-[#01d167]')
-    
-    // Test that label text has correct inactive color
-    const homeTab = screen.getByRole('tab', { name: /navigate to home/i })
-    const homeLabel = homeTab.querySelector('span')
-    expect(homeLabel).toHaveClass('text-[#DDDDDD]')
-  })
-  
-  it('calls onTabChange when a tab is clicked', async () => {
-    const user = userEvent.setup()
-    render(<BottomNav activeTab="home" onTabChange={mockTabChange} />)
-    
-    const cardsTab = screen.getByRole('tab', { name: /navigate to cards/i })
-    await user.click(cardsTab)
-    
+  it('only Cards tab is active and clickable', () => {
+    render(<BottomNav onTabChange={mockTabChange} />)
+    const cardsButton = screen.getByLabelText('Navigate to Cards')
+    expect(cardsButton).not.toBeDisabled()
+    fireEvent.click(cardsButton)
     expect(mockTabChange).toHaveBeenCalledWith('my-debit-cards')
+
+    // All other buttons should be disabled
+    expect(screen.getByLabelText('Navigate to Home')).toBeDisabled()
+    expect(screen.getByLabelText('Navigate to Payments')).toBeDisabled()
+    expect(screen.getByLabelText('Navigate to Credit')).toBeDisabled()
+    expect(screen.getByLabelText('Navigate to Profile')).toBeDisabled()
   })
   
   it('is only visible on mobile screens', () => {
-    render(<BottomNav activeTab="home" onTabChange={mockTabChange} />)
+    render(<BottomNav />)
     
     const navElement = screen.getByRole('navigation')
     expect(navElement).toHaveClass('md:hidden')
   })
   
   it('has white background with top border and shadow', () => {
-    render(<BottomNav activeTab="home" onTabChange={mockTabChange} />)
+    render(<BottomNav />)
     
     const navElement = screen.getByRole('navigation')
     expect(navElement).toHaveClass('bg-white')

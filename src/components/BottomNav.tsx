@@ -1,7 +1,6 @@
 import { SvgIcon } from './SvgIcon'
 
 interface BottomNavProps {
-  activeTab?: string
   onTabChange?: (tabId: string) => void
 }
 
@@ -13,7 +12,7 @@ const navItems = [
   { id: 'settings', iconName: 'user-mobile', label: 'Profile' },
 ] as const
 
-export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+export default function BottomNav({ onTabChange }: BottomNavProps) {
   // Always select 'my-debit-cards' as active
   const selectedTab = 'my-debit-cards'
   return (
