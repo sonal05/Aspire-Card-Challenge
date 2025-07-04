@@ -230,7 +230,6 @@ export default function Home() {
         
         {/* Mobile Bottom Navigation */}
         <BottomNav 
-          activeTab={activeTab} 
           onTabChange={(tabId) => setActiveTab(tabId)} 
         />
       </div>
