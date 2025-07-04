@@ -21,7 +21,7 @@ export default function BottomNav({ onTabChange }: BottomNavProps) {
       role="navigation" 
       aria-label="Bottom navigation"
     >
-      <div className="grid grid-cols-5 h-20">
+      <div className="grid grid-cols-5 h-14">
         {navItems.map((item) => {
           const isActive = item.id === selectedTab
           return (
