@@ -1,19 +1,21 @@
 import { SvgIcon } from './SvgIcon'
 
 interface BottomNavProps {
-  activeTab: string
+  activeTab?: string
   onTabChange?: (tabId: string) => void
 }
 
 const navItems = [
-  { id: 'home', iconName: 'Home', label: 'Home' },
+  { id: 'home', iconName: 'home-mobile', label: 'Home' },
   { id: 'my-debit-cards', iconName: 'Card', label: 'Cards' },
   { id: 'payments', iconName: 'Payments', label: 'Payments' },
   { id: 'credit', iconName: 'Credit', label: 'Credit' },
-  { id: 'settings', iconName: 'user', label: 'Profile' },
+  { id: 'settings', iconName: 'user-mobile', label: 'Profile' },
 ] as const
 
 export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+  // Always select 'my-debit-cards' as active
+  const selectedTab = 'my-debit-cards'
   return (
     <nav 
       className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-50 md:hidden shadow-[0_-4px_8px_rgba(0,0,0,0.05)]"
@@ -22,15 +24,17 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
     >
       <div className="grid grid-cols-5 h-20">
         {navItems.map((item) => {
-          const isActive = activeTab === item.id;
+          const isActive = item.id === selectedTab
           return (
             <button
               key={item.id}
-              onClick={() => onTabChange?.(item.id)}
+              onClick={isActive ? () => onTabChange?.(item.id) : undefined}
               role="tab"
               aria-selected={isActive}
               aria-label={`Navigate to ${item.label}`}
-              className="flex flex-col items-center justify-center h-full transition-colors focus:outline-none"
+              className={`flex flex-col items-center justify-center h-full transition-colors focus:outline-none ${!isActive ? 'pointer-events-none opacity-60' : ''}`}
+              disabled={!isActive}
+              tabIndex={isActive ? 0 : -1}
             >
               <SvgIcon 
                 name={item.iconName} 

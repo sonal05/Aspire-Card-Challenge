@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Aspire Card Challenge",
+  title: "Aspire Cards",
   description: "Modern card management application built with Next.js and React Query",
 };
 
